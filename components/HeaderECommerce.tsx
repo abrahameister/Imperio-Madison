@@ -6,6 +6,7 @@ import { useScrollShrink } from '@/hooks/useScrollShrink';
 import { useTypingPlaceholder } from '@/hooks/useTypingPlaceholder';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useCart } from '@/context/CartContext';
+import { useProducts } from '@/hooks/useProducts';
 import { mockProducts, formatCLP, normalizeStr, type Product } from '@/lib/mockData';
 
 /* ─────────────────────────────────────────────
@@ -196,19 +197,21 @@ function SearchBar({ onFocusChange, onQueryChange }: SearchBarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const debouncedQuery = useDebounce(query, 350);
   const placeholder = useTypingPlaceholder();
+  const { products, isLoading } = useProducts();
 
   /* ── Filter products locally (accent-insensitive via NFD) ── */
   const searchResults = useMemo<Product[]>(() => {
     const q = normalizeStr(debouncedQuery.trim());
     if (!q) return [];
-    return mockProducts.filter(
+    return products.filter(
       (p) =>
         normalizeStr(p.nombre).includes(q) ||
         normalizeStr(p.marca).includes(q) ||
         normalizeStr(p.categoria).includes(q) ||
         normalizeStr(p.descripcion).includes(q),
     );
-  }, [debouncedQuery]);
+  }, [debouncedQuery, products]);
+
 
   /* ── Emit to parent ── */
   useEffect(() => { onQueryChange(debouncedQuery); }, [debouncedQuery, onQueryChange]);
@@ -340,17 +343,19 @@ function MobileSearchModal({ isOpen, onClose, onQueryChange }: MobileSearchModal
   const inputRef = useRef<HTMLInputElement>(null);
   const debouncedQuery = useDebounce(query, 350);
   const placeholder = useTypingPlaceholder();
+  const { products, isLoading } = useProducts();
 
   const searchResults = useMemo<Product[]>(() => {
     const q = normalizeStr(debouncedQuery.trim());
     if (!q) return [];
-    return mockProducts.filter(
+    return products.filter(
       (p) =>
         normalizeStr(p.nombre).includes(q) ||
         normalizeStr(p.marca).includes(q) ||
         normalizeStr(p.categoria).includes(q),
     );
-  }, [debouncedQuery]);
+  }, [debouncedQuery, products]);
+
 
   useEffect(() => { onQueryChange(debouncedQuery); }, [debouncedQuery, onQueryChange]);
 

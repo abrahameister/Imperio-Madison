@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo, useMemo } from 'react';
 import { ShoppingCart, Check, TrendingDown } from 'lucide-react';
-import { mockProducts, formatCLP, maxSavings, avgCompetitorPrice, type Product } from '@/lib/mockData';
+import { formatCLP, maxSavings, avgCompetitorPrice, type Product } from '@/lib/mockData';
 import { useCart } from '@/context/CartContext';
+import { ProductGridSkeleton } from './ProductSkeletons';
+import { useProducts } from '@/hooks/useProducts';
 
 /* ─────────────────────────────────────────────
    CATEGORY FILTER CHIPS
@@ -220,28 +222,40 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
 export function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('Todos');
   const { addToCart } = useCart();
+  const { products, isLoading, error, refetch } = useProducts();
 
-  // Stable callback — ProductCard memoization holds because addToCart is stable via useCallback in CartContext
   const handleAddToCart = useCallback(
     (product: Product) => addToCart(product),
     [addToCart],
   );
 
-  const filteredProducts = activeCategory === 'Todos'
-    ? mockProducts
-    : mockProducts.filter((p) => p.categoria === activeCategory);
+  const filteredProducts = useMemo(() => {
+    return activeCategory === 'Todos'
+      ? products
+      : products.filter((p) => p.categoria === activeCategory);
+  }, [products, activeCategory]);
 
   return (
     <section aria-label="Catálogo de productos" className="w-full">
 
       {/* ── Section header ── */}
-      <div className="flex flex-col gap-1 mb-5">
-        <h2 className="font-heading text-xl font-bold text-text">
-          Nuestros Productos
-        </h2>
-        <p className="text-sm text-text-muted">
-          Precios PYME imbatibles. Compara y ahorra antes de ir al supermercado.
-        </p>
+      <div className="flex items-end justify-between mb-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-heading text-xl font-bold text-text">
+            Nuestros Productos
+          </h2>
+          <p className="text-sm text-text-muted">
+            Precios PYME imbatibles. Real-time desde Supabase.
+          </p>
+        </div>
+        {!isLoading && !error && (
+          <button 
+            onClick={refetch}
+            className="text-xs text-accent-primary hover:underline font-medium"
+          >
+            Refrescar
+          </button>
+        )}
       </div>
 
       {/* ── Category chips ── */}
@@ -249,8 +263,20 @@ export function ProductGrid() {
         <CategoryChips active={activeCategory} onChange={setActiveCategory} />
       </div>
 
-      {/* ── Grid ── */}
-      {filteredProducts.length > 0 ? (
+      {/* ── Main content area ── */}
+      {isLoading ? (
+        <ProductGridSkeleton />
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center py-20 gap-4 text-center border border-dashed border-border rounded-xl bg-surface/30">
+          <p className="text-danger font-medium">{error}</p>
+          <button 
+            onClick={refetch}
+            className="px-6 py-2 bg-surface2 border border-border rounded-pill text-sm font-bold hover:bg-surface2/80 transition-all"
+          >
+            Reintentar conexión
+          </button>
+        </div>
+      ) : filteredProducts.length > 0 ? (
         <div
           className="
             grid gap-4
@@ -270,16 +296,18 @@ export function ProductGrid() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
-          <span className="text-4xl">🔍</span>
+          <span className="text-4xl" role="img" aria-label="Sin resultados">🔍</span>
           <p className="text-text font-medium">Sin productos en esta categoría</p>
           <p className="text-text-muted text-sm">Selecciona otra categoría para ver más productos.</p>
         </div>
       )}
 
       {/* ── Count footer ── */}
-      <p className="mt-4 text-xs text-text-muted text-right">
-        {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''} disponible{filteredProducts.length !== 1 ? 's' : ''}
-      </p>
+      {!isLoading && !error && (
+        <p className="mt-4 text-xs text-text-muted text-right">
+          {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''} disponible{filteredProducts.length !== 1 ? 's' : ''}
+        </p>
+      )}
     </section>
   );
 }

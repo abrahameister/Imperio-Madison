@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { type Product, type ProductPrices, avgCompetitorPrice } from '@/lib/mockData';
 
 /* ─────────────────────────────────────────────────────────────────
@@ -78,9 +78,28 @@ function calcTotals(items: CartItem[]): CartTotals {
    Provider
    ───────────────────────────────────────────────────────────────── */
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  /* ── Hydrate from localStorage on first mount (client only) ── */
+  const [items, setItems] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const saved = localStorage.getItem('im_cart');
+      return saved ? (JSON.parse(saved) as CartItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  /* ── Persist to localStorage on every change ── */
+  useEffect(() => {
+    try {
+      localStorage.setItem('im_cart', JSON.stringify(items));
+    } catch {
+      // quota exceeded or private mode — silent fail
+    }
+  }, [items]);
+
 
   const addToCart = useCallback((product: Product) => {
     setItems((prev) => {
