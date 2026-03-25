@@ -200,7 +200,7 @@ export function MagicComparisonModal() {
   const maxCompetitor = Math.max(totalLider, totalJumbo, totalTottus);
   const maxSavingsVsWorst = maxCompetitor - totalPYME;
   const waText = buildWhatsAppMessage(items, totalPYME, totalAhorro);
-  const waUrl  = `https://wa.me/56900000000?text=${waText}`;
+  const waUrl  = `https://wa.me/56929855415?text=${waText}`;
 
   const CHAINS = [
     { name: 'Lider',   total: totalLider,   color: '#0071CE', bg: '#0071CE14' },
