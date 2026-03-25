@@ -1,0 +1,8 @@
+﻿node_modules/
+.next/
+.env*
+.vercel/
+dist/
+build/
+.DS_Store
+.vscode/
