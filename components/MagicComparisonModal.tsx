@@ -333,6 +333,42 @@ export function MagicComparisonModal() {
               </p>
             </div>
 
+            {/* ── Business Rules ── */}
+            <div className="bg-surface/50 border border-border/80 rounded-xl p-5 text-sm text-text-muted">
+              
+              <div className="flex gap-2 items-center mb-3">
+                <span className="text-xl">🚚</span> 
+                <h3 className="font-bold text-text text-base">Despacho y Logística</h3>
+              </div>
+              
+              <p className="mb-1"><span className="font-semibold text-text">Despacho exclusivo en Región Metropolitana.</span></p>
+              <p className="mb-4"><span className="text-accent-secondary font-bold">Pedido mínimo:</span> $15.000.</p>
+              
+              <ul className="space-y-3 mb-5 pl-2 border-l-2 border-border/60">
+                <li className="pl-3">
+                  <span className="font-semibold text-text">Zona 1 (Hiper-Local) — <span className="text-accent-secondary font-bold">$1.990</span></span>
+                  <br/><span className="text-xs">Santiago Centro, San Miguel, Pedro Aguirre Cerda, La Pintana, San Ramón, El Bosque, La Granja.</span>
+                </li>
+                <li className="pl-3">
+                  <span className="font-semibold text-text">Zona 2 (Intermedia) — <span className="text-accent-secondary font-bold">$2.990</span></span>
+                  <br/><span className="text-xs">Ñuñoa, Providencia, Macul, San Joaquín, Estación Central, Quinta Normal, Puente Alto, La Florida, San Bernardo.</span>
+                </li>
+                <li className="pl-3">
+                  <span className="font-semibold text-text">Zona 3 (Lejana - "Costo Real") — <span className="text-accent-secondary font-bold">$4.990</span></span>
+                  <br/><span className="text-xs">Las Condes, Vitacura, Lo Barnechea, Maipú, Pudahuel, Quilicura, Huechuraba, Cerrillos.</span>
+                </li>
+                <li className="pl-3">
+                  <span className="text-text-muted/70 italic text-xs">Resto de la RM (Ej. Colina, Peñaflor): Sin cobertura por ahora.</span>
+                </li>
+              </ul>
+              
+              <div className="flex gap-2 items-center mb-1">
+                <span className="text-xl">💳</span> 
+                <h3 className="font-bold text-text">Métodos de Pago</h3>
+              </div>
+              <p className="text-xs pl-7">Aceptamos Efectivo o Transferencia al momento de la entrega.</p>
+            </div>
+
             {/* ── CTA ── */}
             <div ref={ctaRef} className="flex flex-col items-center gap-3" style={{ opacity: 0 }}>
               <a

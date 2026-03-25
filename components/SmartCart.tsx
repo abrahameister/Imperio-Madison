@@ -249,16 +249,16 @@ export function SmartCart() {
                 <ShoppingBag size={28} className="text-text-muted/50" strokeWidth={1.5} />
               </div>
               <div>
-                <p className="font-semibold text-text">Tu carrito está vacío</p>
-                <p className="text-sm text-text-muted mt-1">
-                  Agrega productos desde la vitrina y compara tus ahorros.
+                <p className="font-bold text-lg text-text">¡Tu carrito está vacío!</p>
+                <p className="text-sm text-text-muted mt-2">
+                  Empieza a ahorrar agregando productos.
                 </p>
               </div>
               <button
                 onClick={closeCart}
-                className="px-5 py-2 rounded-pill bg-accent-primary/15 border border-accent-primary/30 text-accent-primary text-sm font-medium hover:bg-accent-primary/25 transition-all duration-150"
+                className="px-6 py-2.5 mt-2 rounded-pill bg-accent-primary/15 border border-accent-primary/30 text-accent-primary text-sm font-bold hover:bg-accent-primary hover:text-bg transition-all duration-200"
               >
-                Ver productos
+                Volver a comprar
               </button>
             </div>
           ) : (

@@ -6,13 +6,14 @@ import { SmartCart } from '@/components/SmartCart';
 import { MagicComparisonModal } from '@/components/MagicComparisonModal';
 
 export const metadata: Metadata = {
-  title: 'Imperio Madison — Compara y Ahorra',
+  title: 'Imperio Madison Mercadito - Tu Opción Más Barata',
   description:
-    'Compara precios de tu supermercado con Jumbo, Lider y Tottus. Descubre cuánto ahorras con Imperio Madison.',
+    'Ahorra tiempo y dinero. Comparamos los precios de Lider, Jumbo y Tottus para darte siempre la mejor oferta.',
   openGraph: {
-    title: 'Imperio Madison — Compara y Ahorra',
-    description: 'Tu distribuidora local siempre más barata que los grandes supermercados.',
+    title: 'Imperio Madison Mercadito - Tu Opción Más Barata',
+    description: 'Ahorra tiempo y dinero. Comparamos los precios de Lider, Jumbo y Tottus para darte siempre la mejor oferta.',
     type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Imperio Madison' }],
   },
 };
 

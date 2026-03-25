@@ -108,27 +108,32 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
         style={{ backgroundColor: product.colorPlaceholder + '1A' }}
         aria-hidden
       >
-        {product.imagenUrl ? (
+        {product.imagenUrl && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={product.imagenUrl}
             alt={product.nombre}
             className="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
           />
-        ) : (
-          <div className="flex flex-col items-center gap-2 opacity-80">
-            <span
-              className="w-16 h-16 rounded-xl shadow-inner"
-              style={{ backgroundColor: product.colorPlaceholder }}
-            />
-            <span className="text-xs font-medium text-text-muted">{product.marca}</span>
-          </div>
         )}
 
         {/* Categoria pill */}
-        <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-sm bg-bg/70 backdrop-blur-sm text-[10px] text-text-muted font-medium">
+        <span className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-sm bg-bg/70 backdrop-blur-sm text-[10px] text-text-muted font-medium">
           {product.categoria}
         </span>
+        
+        {/* Fallback component, shown if no URL or if img fails to load */}
+        <div className={`flex flex-col items-center gap-2 opacity-80 ${product.imagenUrl ? 'hidden' : ''}`}>
+          <span
+            className="w-16 h-16 rounded-xl shadow-inner"
+            style={{ backgroundColor: product.colorPlaceholder }}
+          />
+          <span className="text-[10px] font-medium text-text-muted px-2 text-center uppercase tracking-wider line-clamp-1">{product.nombre}</span>
+        </div>
       </div>
 
       {/* ── Card body ── */}
@@ -297,8 +302,8 @@ export function ProductGrid() {
       ) : (
         <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
           <span className="text-4xl" role="img" aria-label="Sin resultados">🔍</span>
-          <p className="text-text font-medium">Sin productos en esta categoría</p>
-          <p className="text-text-muted text-sm">Selecciona otra categoría para ver más productos.</p>
+          <p className="text-text font-medium cursor-default">¡Ups! No encontramos ese producto.</p>
+          <p className="text-text-muted text-sm max-w-[280px]">Intenta buscar otra cosa o revisa nuestras ofertas destacadas.</p>
         </div>
       )}
 
