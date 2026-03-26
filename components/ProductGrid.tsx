@@ -162,13 +162,13 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
 
           {/* Individual competitor prices — small strip */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-lider/15 text-comp-lider border border-comp-lider/20 line-through">
+            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-lider/15 text-white font-medium border border-comp-lider/40 line-through">
               L: {formatCLP(product.precios.precioLider)}
             </span>
-            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-jumbo/15 text-comp-jumbo border border-comp-jumbo/20 line-through">
+            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-jumbo/15 text-white font-medium border border-comp-jumbo/40 line-through">
               J: {formatCLP(product.precios.precioJumbo)}
             </span>
-            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-tottus/15 text-comp-tottus border border-comp-tottus/20 line-through">
+            <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-comp-tottus/15 text-white font-medium border border-comp-tottus/40 line-through">
               T: {formatCLP(product.precios.precioTottus)}
             </span>
           </div>
@@ -250,7 +250,7 @@ export function ProductGrid() {
             Nuestros Productos
           </h2>
           <p className="text-sm text-text-muted">
-            Precios PYME imbatibles. Real-time desde Supabase.
+            Tu despensa llena por mucho menos.
           </p>
         </div>
         {!isLoading && !error && (

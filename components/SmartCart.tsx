@@ -66,17 +66,29 @@ function CartItemRow({ product, qty, onUpdate, onRemove }: CartItemRowProps) {
 
   return (
     <li className="flex items-start gap-3 py-3 border-b border-border/60 last:border-0 group">
-      {/* Color thumbnail */}
+      {/* Product Image / Color thumbnail */}
       <span
         className="
-          w-12 h-12 rounded-md shrink-0 flex items-center justify-center
+          relative w-12 h-12 rounded-md shrink-0 flex items-center justify-center overflow-hidden
           transition-transform duration-200 group-hover:scale-105
         "
         style={{ backgroundColor: product.colorPlaceholder + '28' }}
         aria-hidden
       >
+        {product.imagenUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={product.imagenUrl}
+            alt={product.nombre}
+            className="w-full h-full object-contain p-1"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+        )}
         <span
-          className="w-6 h-6 rounded-sm"
+          className={`w-6 h-6 rounded-sm ${product.imagenUrl ? 'hidden' : ''}`}
           style={{ backgroundColor: product.colorPlaceholder }}
         />
       </span>
@@ -281,23 +293,30 @@ export function SmartCart() {
           <div className="shrink-0 border-t border-border bg-surface/60 backdrop-blur-sm px-5 py-4 flex flex-col gap-3">
 
             {/* Totals */}
-            <div className="space-y-1.5">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between text-sm text-text-muted">
-                <span>Subtotal PYME</span>
+                <span>Subtotal:</span>
                 <span className="font-semibold text-text tabular-nums">{formatCLP(totalPYME)}</span>
               </div>
 
-              {totalAhorro > 0 && (
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-accent-secondary font-medium">
-                    <TrendingDown size={14} strokeWidth={2.5} />
-                    Ahorro acumulado
-                  </span>
-                  <span className="font-bold text-accent-secondary tabular-nums">
-                    {formatCLP(totalAhorro)}
-                  </span>
+              <div className="border-t border-border/70 pt-2 space-y-1">
+                <div className="flex items-center justify-between text-base">
+                  <span className="font-bold text-text">Total a pagar:</span>
+                  <span className="font-bold text-text tabular-nums">{formatCLP(totalPYME)}</span>
                 </div>
-              )}
+
+                {totalAhorro > 0 && (
+                  <div className="flex items-start justify-between">
+                    <span className="flex items-center gap-1.5 text-accent-secondary font-bold text-lg leading-tight">
+                      <TrendingDown size={20} strokeWidth={2.5} className="mt-0.5" />
+                      Lo que te ahorraste:
+                    </span>
+                    <span className="font-extrabold text-accent-secondary text-2xl tabular-nums leading-tight tracking-tight">
+                      {formatCLP(totalAhorro)}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* CTA */}

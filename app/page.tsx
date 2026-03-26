@@ -19,8 +19,7 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-text-muted max-w-lg mx-auto text-base sm:text-lg">
-          Agrega productos, ve cuánto pagarías en Jumbo, Lider y Tottus,
-          y comprueba que con <span className="text-accent-secondary font-semibold">Imperio Madison</span> siempre ahorras.
+          Arma tu carrito y descubre al instante cuánto te ahorras frente a Jumbo, Lider y Tottus.
         </p>
       </section>
 
