@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { ShoppingCart, Search, X, Leaf, Tag } from 'lucide-react';
+import { ShoppingCart, Search, X, Tag } from 'lucide-react';
 import { useScrollShrink } from '@/hooks/useScrollShrink';
 import { useTypingPlaceholder } from '@/hooks/useTypingPlaceholder';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -29,11 +29,27 @@ function LogoSensorial() {
         "
         aria-hidden
       >
-        <Leaf
-          size={16}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="text-accent-secondary group-hover:scale-110 transition-transform duration-300"
-          strokeWidth={2.5}
-        />
+          aria-hidden="true"
+        >
+          {/* Silueta Chanchito (Piggy Bank) */}
+          <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z" />
+          <path d="M2 9v1c0 1.1.9 2 2 2h1" />
+          <path d="M16 11h.01" />
+          {/* Signo $ integrado en el cuerpo */}
+          <line x1="11" x2="11" y1="8" y2="16" strokeWidth="2" />
+          <path d="M13.5 10.5h-2.5a1.25 1.25 0 0 0 0 2.5h1.5a1.25 1.25 0 0 1 0 2.5h-2.5" strokeWidth="2" />
+        </svg>
       </span>
       <span className="flex flex-col leading-none">
         <span className="text-[10px] font-medium tracking-[0.22em] uppercase text-text-muted group-hover:text-text transition-colors duration-300">
