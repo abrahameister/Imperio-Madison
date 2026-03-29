@@ -4,6 +4,7 @@ import { CartProvider } from '@/context/CartContext';
 import { HeaderECommerce } from '@/components/HeaderECommerce';
 import { SmartCart } from '@/components/SmartCart';
 import { MagicComparisonModal } from '@/components/MagicComparisonModal';
+import { ProductSuggestionModal } from '@/components/ProductSuggestionModal';
 
 export const metadata: Metadata = {
   title: 'Imperio Madison Mercadito - Tu Opción Más Barata',
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               inside CartProvider so they share the same cart state */}
           <SmartCart />
           <MagicComparisonModal />
+          <ProductSuggestionModal />
         </CartProvider>
       </body>
     </html>

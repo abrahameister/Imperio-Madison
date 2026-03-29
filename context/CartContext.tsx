@@ -36,6 +36,9 @@ interface CartContextValue extends CartTotals {
   closeCart: () => void;
   openModal: () => void;
   closeModal: () => void;
+  isSuggestionOpen: boolean;
+  openSuggestion: () => void;
+  closeSuggestion: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -90,6 +93,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
 
   /* ── Persist to localStorage on every change ── */
   useEffect(() => {
@@ -129,10 +133,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = useCallback(() => setItems([]), []);
 
-  const openCart = useCallback(() => { setIsCartOpen(true); setIsModalOpen(false); }, []);
+  const openCart = useCallback(() => { setIsCartOpen(true); setIsModalOpen(false); setIsSuggestionOpen(false); }, []);
   const closeCart = useCallback(() => setIsCartOpen(false), []);
-  const openModal = useCallback(() => { setIsModalOpen(true); setIsCartOpen(false); }, []);
+  const openModal = useCallback(() => { setIsModalOpen(true); setIsCartOpen(false); setIsSuggestionOpen(false); }, []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
+  const openSuggestion = useCallback(() => { setIsSuggestionOpen(true); setIsCartOpen(false); setIsModalOpen(false); }, []);
+  const closeSuggestion = useCallback(() => setIsSuggestionOpen(false), []);
 
   const totals = useMemo(() => calcTotals(items), [items]);
 
@@ -150,9 +156,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       closeCart,
       openModal,
       closeModal,
+      isSuggestionOpen,
+      openSuggestion,
+      closeSuggestion,
     }),
     [items, totals, addToCart, removeFromCart, updateQuantity, clearCart,
-     isCartOpen, isModalOpen, openCart, closeCart, openModal, closeModal],
+     isCartOpen, isModalOpen, isSuggestionOpen, openCart, closeCart, openModal, closeModal, openSuggestion, closeSuggestion],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

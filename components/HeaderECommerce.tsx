@@ -82,10 +82,11 @@ interface SearchDropdownProps {
   results: Product[];
   query: string;
   onSelect: (product: Product) => void;
+  onSuggest: () => void;
   isVisible: boolean;
 }
 
-function SearchDropdown({ results, query, onSelect, isVisible }: SearchDropdownProps) {
+function SearchDropdown({ results, query, onSelect, onSuggest, isVisible }: SearchDropdownProps) {
   if (!isVisible) return null;
 
   const isEmpty = query.length > 0 && results.length === 0;
@@ -149,7 +150,7 @@ function SearchDropdown({ results, query, onSelect, isVisible }: SearchDropdownP
 
       {/* ── Empty state ── */}
       {isEmpty && (
-        <div className="px-5 py-6 flex flex-col items-center gap-2 text-center">
+        <div className="px-5 py-6 flex flex-col items-center gap-4 text-center">
           <span
             className="
               flex items-center justify-center w-10 h-10 rounded-full
@@ -159,13 +160,20 @@ function SearchDropdown({ results, query, onSelect, isVisible }: SearchDropdownP
           >
             <Search size={18} className="text-warning" strokeWidth={2} />
           </span>
-          <p className="text-sm font-medium text-text">
-            No encontramos &quot;{query}&quot;
-          </p>
-          <p className="text-xs text-text-muted max-w-[260px]">
-            No encontramos ese producto, pero seguro tenemos una alternativa más barata.{' '}
-            <span className="text-accent-primary font-medium">¡Escríbenos!</span>
-          </p>
+          <div>
+            <p className="text-sm font-medium text-text">
+              No encontramos &quot;{query}&quot;
+            </p>
+            <p className="text-xs text-text-muted mt-1 max-w-[260px]">
+              No encontramos ese producto, pero seguro tenemos una alternativa más barata.
+            </p>
+          </div>
+          <button
+            onMouseDown={(e) => { e.preventDefault(); onSuggest(); }}
+            className="mt-1 px-4 py-2.5 bg-accent-primary text-bg font-bold text-xs rounded-lg hover:bg-accent-primary/90 transition-colors active:scale-95"
+          >
+            ¿No encuentras lo que buscas? Pídelo aquí
+          </button>
         </div>
       )}
 
@@ -198,6 +206,7 @@ function SearchBar({ onFocusChange, onQueryChange }: SearchBarProps) {
   const debouncedQuery = useDebounce(query, 350);
   const placeholder = useTypingPlaceholder();
   const { products, isLoading } = useProducts();
+  const { openSuggestion } = useCart();
 
   /* ── Filter products locally (accent-insensitive via NFD) ── */
   const searchResults = useMemo<Product[]>(() => {
@@ -323,6 +332,7 @@ function SearchBar({ onFocusChange, onQueryChange }: SearchBarProps) {
         results={searchResults}
         query={debouncedQuery.trim()}
         onSelect={handleSelect}
+        onSuggest={openSuggestion}
         isVisible={isDropdownOpen}
       />
     </div>
@@ -344,6 +354,7 @@ function MobileSearchModal({ isOpen, onClose, onQueryChange }: MobileSearchModal
   const debouncedQuery = useDebounce(query, 350);
   const placeholder = useTypingPlaceholder();
   const { products, isLoading } = useProducts();
+  const { openSuggestion } = useCart();
 
   const searchResults = useMemo<Product[]>(() => {
     const q = normalizeStr(debouncedQuery.trim());
@@ -441,11 +452,19 @@ function MobileSearchModal({ isOpen, onClose, onQueryChange }: MobileSearchModal
 
         {/* Empty state */}
         {isEmpty && (
-          <div className="mt-3 px-4 py-5 text-center max-w-lg mx-auto rounded-lg border border-border bg-surface2/30">
-            <p className="text-sm font-medium text-text">Sin resultados para &quot;{debouncedQuery.trim()}&quot;</p>
-            <p className="text-xs text-text-muted mt-1">
-              No encontramos ese producto, pero seguro tenemos una alternativa más barata.
-            </p>
+          <div className="mt-3 px-4 py-5 text-center max-w-lg mx-auto rounded-lg border border-border bg-surface2/30 flex flex-col items-center gap-4">
+            <div>
+              <p className="text-sm font-medium text-text">Sin resultados para &quot;{debouncedQuery.trim()}&quot;</p>
+              <p className="text-xs text-text-muted mt-1">
+                No encontramos ese producto, pero seguro tenemos una alternativa más barata.
+              </p>
+            </div>
+            <button
+              onClick={() => { onClose(); openSuggestion(); }}
+              className="px-4 py-2.5 bg-accent-primary text-bg font-bold text-xs rounded-lg hover:bg-accent-primary/90 transition-colors w-full shadow-md"
+            >
+              ¿No encuentras lo que buscas? Pídelo aquí
+            </button>
           </div>
         )}
       </div>

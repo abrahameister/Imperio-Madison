@@ -226,7 +226,7 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
    ───────────────────────────────────────────── */
 export function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('Todos');
-  const { addToCart } = useCart();
+  const { addToCart, openSuggestion } = useCart();
   const { products, isLoading, error, refetch } = useProducts();
 
   const handleAddToCart = useCallback(
@@ -300,10 +300,18 @@ export function ProductGrid() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
+        <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
           <span className="text-4xl" role="img" aria-label="Sin resultados">🔍</span>
-          <p className="text-text font-medium cursor-default">¡Ups! No encontramos ese producto.</p>
-          <p className="text-text-muted text-sm max-w-[280px]">Intenta buscar otra cosa o revisa nuestras ofertas destacadas.</p>
+          <div>
+            <p className="text-text font-medium cursor-default">¡Ups! No encontramos ese producto.</p>
+            <p className="text-text-muted text-sm max-w-[280px] mt-1">Intenta buscar otra cosa o envíanos tu sugerencia.</p>
+          </div>
+          <button
+            onClick={openSuggestion}
+            className="mt-2 px-6 py-3 bg-accent-primary text-bg font-bold text-sm rounded-lg hover:bg-accent-primary/90 transition-all shadow-[0_4px_16px_rgba(232,134,50,0.25)] hover:shadow-[0_6px_24px_rgba(232,134,50,0.35)] active:scale-[0.98]"
+          >
+            ¿No encuentras lo que buscas? Pídelo aquí
+          </button>
         </div>
       )}
 
