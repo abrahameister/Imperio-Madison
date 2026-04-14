@@ -100,7 +100,7 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
 
       {/* ── Product image ── */}
       <div
-        className="relative w-full overflow-hidden"
+        className="relative w-full flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: product.colorPlaceholder + '1A', height: '180px' }}
         aria-hidden
       >
@@ -109,7 +109,8 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
           <img
             src={product.imagenUrl}
             alt={product.nombre}
-            className="block w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            className="max-w-full max-h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            style={{ width: 'auto', height: '100%' }}
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               const fb = e.currentTarget.nextElementSibling as HTMLElement | null;
