@@ -71,7 +71,7 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
   return (
     <article
       className="
-        group relative flex flex-col
+        group relative flex flex-col w-full max-w-[100vw] mx-auto
         bg-surface border border-border rounded-lg
         overflow-hidden
         transition-all duration-300 ease-out
@@ -113,7 +113,8 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
           <img
             src={product.imagenUrl}
             alt={product.nombre}
-            className="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+            className="max-w-full w-full h-auto max-h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            style={{ maxHeight: '100%', objectFit: 'contain' }}
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.nextElementSibling?.classList.remove('hidden');
