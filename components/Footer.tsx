@@ -20,16 +20,16 @@ export function Footer() {
           <Instagram size={22} strokeWidth={2} />
         </a>
         
-        <p className="text-sm md:text-base text-text-muted">
+        <p className="text-sm md:text-base text-text-muted text-balance px-4">
           Dando vida a tus ideas web. Creado por{' '}
           <a
             href="https://www.duetsolutions.cl/"
             target="_blank"
             rel="noopener noreferrer"
             className="
-              inline-block font-heading font-black text-transparent bg-clip-text
+              inline font-heading font-black text-transparent bg-clip-text
               bg-gradient-to-r from-accent-primary to-warning
-              hover:opacity-80 transition-all hover:scale-105
+              hover:opacity-80 transition-all hover:scale-105 ml-1
             "
           >
             Duet Solutions

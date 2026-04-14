@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CartProvider>
           {/* App Layout */}
-          <div className="flex flex-col min-h-[100dvh]">
+          <div className="flex flex-col min-h-[100dvh] overflow-x-hidden relative">
             <HeaderECommerce />
             {children}
             <Footer />
