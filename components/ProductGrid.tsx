@@ -71,7 +71,7 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
   return (
     <article
       className="
-        group relative flex flex-col h-full w-full
+        group relative flex flex-col
         bg-surface border border-border rounded-lg
         overflow-hidden
         transition-all duration-300 ease-out
@@ -98,42 +98,42 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
         </span>
       )}
 
-      {/* ── Product image / color block ── */}
+      {/* ── Product image ── */}
       <div
-        className="
-          relative w-full aspect-[4/3]
-          flex items-center justify-center
-          overflow-hidden
-        "
-        style={{ backgroundColor: product.colorPlaceholder + '1A' }}
+        className="relative w-full overflow-hidden"
+        style={{ backgroundColor: product.colorPlaceholder + '1A', height: '180px' }}
         aria-hidden
       >
-        {product.imagenUrl && (
+        {product.imagenUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={product.imagenUrl}
             alt={product.nombre}
-            className="absolute inset-0 w-full h-full object-contain p-4 sm:p-6 transition-transform duration-500 group-hover:scale-105"
+            className="block w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              const fb = e.currentTarget.nextElementSibling as HTMLElement | null;
+              if (fb) fb.style.display = 'flex';
             }}
           />
-        )}
+        ) : null}
 
-        {/* Categoria pill */}
-        <span className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-sm bg-bg/70 backdrop-blur-sm text-[10px] text-text-muted font-medium">
-          {product.categoria}
-        </span>
-        
-        {/* Fallback component, shown if no URL or if img fails to load */}
-        <div className={`flex flex-col items-center gap-2 opacity-80 ${product.imagenUrl ? 'hidden' : ''}`}>
+        {/* Fallback */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-80"
+          style={{ display: product.imagenUrl ? 'none' : 'flex' }}
+        >
           <span
             className="w-16 h-16 rounded-xl shadow-inner"
             style={{ backgroundColor: product.colorPlaceholder }}
           />
           <span className="text-[10px] font-medium text-text-muted px-2 text-center uppercase tracking-wider line-clamp-1">{product.nombre}</span>
         </div>
+
+        {/* Categoria pill */}
+        <span className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-sm bg-bg/70 backdrop-blur-sm text-[10px] text-text-muted font-medium">
+          {product.categoria}
+        </span>
       </div>
 
       {/* ── Card body ── */}
