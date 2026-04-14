@@ -5,6 +5,7 @@ import { HeaderECommerce } from '@/components/HeaderECommerce';
 import { SmartCart } from '@/components/SmartCart';
 import { MagicComparisonModal } from '@/components/MagicComparisonModal';
 import { ProductSuggestionModal } from '@/components/ProductSuggestionModal';
+import { Footer } from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Imperio Madison Mercadito - Tu Opción Más Barata',
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <HeaderECommerce />
 
           {/* Main content */}
-          <main>{children}</main>
+          <div className="flex flex-col min-h-screen">
+            {children}
+            <Footer />
+          </div>
 
           {/* Global overlays — rendered as siblings to body children,
               inside CartProvider so they share the same cart state */}
