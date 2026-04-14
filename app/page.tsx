@@ -2,18 +2,17 @@ import { ProductGrid } from '@/components/ProductGrid';
 
 export default function Home() {
   return (
-    <main className="flex-1 flex flex-col w-full">
+    <main className="w-full flex-1">
 
       {/* ── Hero ── */}
-      <section className="px-4 sm:px-6 py-12 max-w-7xl mx-auto text-center">
+      <section className="px-4 sm:px-6 py-10 sm:py-12 w-full max-w-3xl mx-auto text-center">
         <p className="text-xs font-medium tracking-[0.2em] uppercase text-accent-primary mb-3">
           Tu distribuidora de barrio
         </p>
         <h1 className="font-heading text-3xl sm:text-5xl font-extrabold text-text mb-4 leading-tight">
           Compara y{' '}
           <span className="text-accent-secondary">Ahorra</span>
-          <span className="text-text">:</span>
-          <br className="hidden sm:block" />
+          <span className="text-text">: </span>
           <span className="text-2xl sm:text-4xl font-bold text-text-muted">
             Tu carrito vs Los Grandes
           </span>
@@ -24,7 +23,7 @@ export default function Home() {
       </section>
 
       {/* ── Product grid ── */}
-      <section className="px-4 sm:px-6 pb-24 max-w-7xl mx-auto">
+      <section className="px-3 sm:px-6 pb-24 w-full max-w-7xl mx-auto">
         <ProductGrid />
       </section>
 
