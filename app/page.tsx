@@ -2,7 +2,7 @@ import { ProductGrid } from '@/components/ProductGrid';
 
 export default function Home() {
   return (
-    <main className="flex-1 flex flex-col min-h-screen">
+    <main className="flex-1 flex flex-col w-full">
 
       {/* ── Hero ── */}
       <section className="px-4 sm:px-6 py-12 max-w-7xl mx-auto text-center">

@@ -24,11 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className="dark">
       <body>
         <CartProvider>
-          {/* Header reads openCart / closeCart from CartContext internally */}
-          <HeaderECommerce />
-
-          {/* Main content */}
-          <div className="flex flex-col min-h-screen">
+          {/* App Layout */}
+          <div className="flex flex-col min-h-[100dvh]">
+            <HeaderECommerce />
             {children}
             <Footer />
           </div>
