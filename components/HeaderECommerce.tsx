@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { ShoppingCart, Search, X, Leaf, Tag } from 'lucide-react';
+import { ShoppingCart, Search, X, Leaf, Tag, User } from 'lucide-react';
 import { useScrollShrink } from '@/hooks/useScrollShrink';
 import { useTypingPlaceholder } from '@/hooks/useTypingPlaceholder';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -473,25 +473,67 @@ function MobileSearchModal({ isOpen, onClose, onQueryChange }: MobileSearchModal
 }
 
 /* ─────────────────────────────────────────────
-   CART BUTTON
+   MY ACCOUNT BUTTON — placeholder para futura auth
+   ───────────────────────────────────────────── */
+function MyAccountButton() {
+  return (
+    <button
+      aria-label="Mi Cuenta / Iniciar Sesión"
+      className="
+        hidden sm:flex items-center gap-1.5
+        px-3 py-1.5 rounded-full shrink-0
+        border border-border
+        text-text-muted hover:text-text hover:border-text-muted/40
+        text-xs font-medium
+        transition-all duration-200 active:scale-95
+      "
+    >
+      <User size={14} strokeWidth={2} />
+      <span>Mi Cuenta</span>
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   CART BUTTON — muestra ícono + total dinámico
    ───────────────────────────────────────────── */
 function CartButton() {
-  const { totalItems, openCart } = useCart();
+  const { totalItems, totalPYME, openCart } = useCart();
   const hasItems = totalItems > 0;
 
   return (
     <button
       onClick={openCart}
       aria-label={`Abrir carrito — ${totalItems} items`}
-      className="relative flex items-center justify-center w-10 h-10 rounded-full shrink-0 text-text hover:text-accent-primary hover:bg-surface2/60 transition-all duration-200 active:scale-95"
+      className={`
+        relative flex items-center gap-1.5 shrink-0
+        text-text hover:text-accent-primary
+        transition-all duration-200 active:scale-95
+        rounded-full
+        ${hasItems
+          ? 'pl-2.5 pr-3 py-1.5 bg-surface2/60 hover:bg-surface2 border border-border/60'
+          : 'w-10 h-10 justify-center hover:bg-surface2/60'
+        }
+      `}
     >
-      <ShoppingCart size={22} strokeWidth={2} />
-      {hasItems && (
-        <span className="absolute -top-1 -right-1 flex items-center justify-center">
-          <span className="absolute inline-flex w-5 h-5 rounded-full bg-danger/40 animate-ping-slow" aria-hidden />
-          <span className="relative z-10 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-danger text-[10px] font-bold text-white leading-none">
-            {totalItems > 99 ? '99+' : totalItems}
+      {/* Ícono carrito */}
+      <span className="relative flex items-center justify-center">
+        <ShoppingCart size={20} strokeWidth={2} />
+        {/* Badge contador — pegado al ícono */}
+        {hasItems && (
+          <span className="absolute -top-2 -right-2 flex items-center justify-center">
+            <span className="absolute inline-flex w-4 h-4 rounded-full bg-danger/40 animate-ping-slow" aria-hidden />
+            <span className="relative z-10 flex items-center justify-center min-w-[16px] h-[16px] px-0.5 rounded-full bg-danger text-[9px] font-bold text-white leading-none">
+              {totalItems > 99 ? '99+' : totalItems}
+            </span>
           </span>
+        )}
+      </span>
+
+      {/* Total dinámico — visible cuando hay items */}
+      {hasItems && (
+        <span className="text-xs font-bold text-accent-secondary tabular-nums">
+          {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(totalPYME)}
         </span>
       )}
     </button>
@@ -554,7 +596,7 @@ export function HeaderECommerce({ onSearchQuery }: HeaderECommerceProps) {
           </div>
 
           {/* Right cluster */}
-          <div className="flex items-center gap-1 ml-auto md:ml-0">
+          <div className="flex items-center gap-1.5 ml-auto md:ml-0">
             {/* Mobile search icon */}
             <button
               onClick={() => setMobileSearchOpen(true)}
@@ -563,6 +605,8 @@ export function HeaderECommerce({ onSearchQuery }: HeaderECommerceProps) {
             >
               <Search size={20} strokeWidth={2} />
             </button>
+            {/* Mi Cuenta — placeholder auth, desktop only */}
+            <MyAccountButton />
             <CartButton />
           </div>
 

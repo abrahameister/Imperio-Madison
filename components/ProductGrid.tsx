@@ -80,6 +80,49 @@ function CategoryChips({ active, onChange }: CategoryChipsProps) {
 }
 
 /* ─────────────────────────────────────────────
+   COMPETITOR PRICES — High-contrast row design
+   Cada fila: [logo 16px] Nombre  $ X.XXX (tachado)
+   ───────────────────────────────────────────── */
+interface CompetitorPricesProps {
+  precioLider: number;
+  precioJumbo: number;
+  precioTottus: number;
+}
+
+function CompetitorPrices({ precioLider, precioJumbo, precioTottus }: CompetitorPricesProps) {
+  const rows = [
+    { name: 'Líder',   logo: '/logos/lider.png',   price: precioLider  },
+    { name: 'Jumbo',   logo: '/logos/jumbo.png',   price: precioJumbo  },
+    { name: 'Tottus',  logo: '/logos/tottus.png',  price: precioTottus },
+  ];
+
+  return (
+    /* Separador superior sutil */
+    <div className="flex flex-col gap-0.5 pt-2 border-t border-border/40">
+      {rows.map(({ name, logo, price }) => (
+        <div key={name} className="flex items-center gap-1.5">
+          {/* Logo miniatura — object-contain para no distorsionar */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logo}
+            alt={name}
+            width={16}
+            height={16}
+            className="w-4 h-4 object-contain rounded-sm flex-shrink-0 opacity-80"
+          />
+          {/* Nombre del supermercado */}
+          <span className="text-[10px] text-gray-400 w-10 shrink-0">{name}</span>
+          {/* Precio tachado — alto contraste sobre surface oscuro */}
+          <span className="text-[10px] text-gray-300 line-through font-medium">
+            {formatCLP(price)}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
    PRODUCT CARD — Mobile-first rewrite
    ───────────────────────────────────────────── */
 interface ProductCardProps {
@@ -90,8 +133,8 @@ interface ProductCardProps {
 const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const [added, setAdded] = useState(false);
 
+  /* Máximo ahorro respecto a la competencia */
   const savings = maxSavings(product.precios);
-  const competitorAvg = avgCompetitorPrice(product.precios);
 
   const handleAdd = useCallback(() => {
     if (added) return;
@@ -105,25 +148,17 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
       className="flex flex-col bg-surface border border-border rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-primary/30 hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
       aria-label={product.nombre}
     >
-      {/* ── Image area: padding-top aspect ratio trick (works everywhere) ── */}
+      {/* ── Image area: padding-top aspect ratio trick ── */}
       <div
         className="relative w-full overflow-hidden"
         style={{ paddingTop: '66.67%', backgroundColor: product.colorPlaceholder + '18' }}
       >
-        {/* Savings badge */}
-        {savings > 0 && (
-          <span className="absolute top-2 right-2 z-20 flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-accent-secondary/20 border border-accent-secondary/40 text-[10px] font-bold text-accent-secondary">
-            <TrendingDown size={9} strokeWidth={2.5} />
-            -{formatCLP(savings)}
-          </span>
-        )}
-
-        {/* Categoria pill */}
-        <span className="absolute bottom-2 left-2 z-20 px-2 py-0.5 rounded bg-bg/80 backdrop-blur-sm text-[10px] text-text-muted font-medium">
+        {/* Categoría pill — WCAG AA: accent-primary sobre surface oscuro ≥ 4.5:1 */}
+        <span className="absolute bottom-2 left-2 z-20 px-2 py-0.5 rounded-md bg-accent-primary/20 border border-accent-primary/30 backdrop-blur-sm text-[10px] text-accent-primary font-semibold">
           {product.categoria}
         </span>
 
-        {/* Image absolutely fills the padding-box */}
+        {/* Imagen */}
         {product.imagenUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -151,45 +186,46 @@ const ProductCard = memo(function ProductCard({ product, onAddToCart }: ProductC
 
       {/* ── Card body ── */}
       <div className="flex flex-col flex-1 p-3 gap-2">
-        {/* Name */}
-        <h3 className="font-heading font-semibold text-text text-sm leading-snug line-clamp-2">
-          {product.nombre}
-        </h3>
-        <p className="text-[11px] text-text-muted -mt-1">
-          {product.marca} · {product.descripcion}
-        </p>
+        {/* Nombre + descripción */}
+        <div>
+          <h3 className="font-heading font-semibold text-text text-sm leading-snug line-clamp-2">
+            {product.nombre}
+          </h3>
+          <p className="text-[11px] text-text-muted mt-0.5">
+            {product.marca} · {product.descripcion}
+          </p>
+        </div>
 
-        {/* Prices */}
+        {/* ── Bloque de precios ── */}
         <div className="flex flex-col gap-1 mt-auto">
-          {/* Competitor average */}
-          <div className="flex items-center gap-1">
-            <span className="text-[11px] text-text-muted line-through">{formatCLP(competitorAvg)}</span>
-            <span className="text-[9px] text-text-muted/50 italic">prom.</span>
-          </div>
 
-          {/* Competitor badges */}
-          <div className="flex items-center gap-1 flex-wrap">
-            <span className="inline-flex items-center text-[9px] px-1 py-0.5 rounded bg-comp-lider/15 text-white border border-comp-lider/40 line-through font-medium">
-              L: {formatCLP(product.precios.precioLider)}
-            </span>
-            <span className="inline-flex items-center text-[9px] px-1 py-0.5 rounded bg-comp-jumbo/15 text-white border border-comp-jumbo/40 line-through font-medium">
-              J: {formatCLP(product.precios.precioJumbo)}
-            </span>
-            <span className="inline-flex items-center text-[9px] px-1 py-0.5 rounded bg-comp-tottus/15 text-white border border-comp-tottus/40 line-through font-medium">
-              T: {formatCLP(product.precios.precioTottus)}
-            </span>
-          </div>
+          {/* Precios de la competencia — alto contraste, con logos */}
+          <CompetitorPrices
+            precioLider={product.precios.precioLider}
+            precioJumbo={product.precios.precioJumbo}
+            precioTottus={product.precios.precioTottus}
+          />
 
-          {/* OUR price */}
-          <div className="flex items-end gap-1 mt-0.5">
+          {/* Precio PYME — el número héroe */}
+          <div className="flex items-end gap-1 mt-1.5">
             <span className="text-xl font-extrabold text-accent-secondary leading-none font-heading tracking-tight">
               {formatCLP(product.precios.precioPYME)}
             </span>
             <span className="text-[11px] text-accent-secondary/70 mb-0.5 font-medium">/ {product.unidad}</span>
           </div>
+
+          {/* Badge de ahorro — junto al precio, explícito y amigable */}
+          {savings > 0 && (
+            <div className="flex items-center gap-1">
+              <TrendingDown size={11} className="text-accent-secondary shrink-0" strokeWidth={2.5} />
+              <span className="text-[11px] font-bold text-accent-secondary">
+                Ahorras {formatCLP(savings)}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Add to cart button */}
+        {/* Botón agregar al carrito */}
         <button
           onClick={handleAdd}
           aria-label={added ? 'Agregado al carrito' : `Agregar ${product.nombre} al carrito`}
@@ -274,7 +310,7 @@ export function ProductGrid() {
           </button>
         </div>
       ) : filteredProducts.length > 0 ? (
-        /* 2 columns on mobile, 3 on md, 4 on xl */
+        /* 2 cols mobile, 3 md, 4 xl */
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {filteredProducts.map((product) => (
             <ProductCard
