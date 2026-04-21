@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { X, CheckCircle2, MessageCircle, ShoppingBag } from 'lucide-react';
 import { gsap } from 'gsap';
 import { useCart } from '@/context/CartContext';
@@ -16,9 +17,11 @@ interface ChainCardProps {
   bgColor: string;       // subtle background
   isWinner?: boolean;    // PYME card — biggest, animated
   animRef?: React.RefObject<HTMLDivElement | null>;
+  logoSrc?: string;      // URL del logo del supermercado
+  logoAlt?: string;
 }
 
-function ChainCard({ name, total, color, bgColor, isWinner = false, animRef }: ChainCardProps) {
+function ChainCard({ name, total, color, bgColor, isWinner = false, animRef, logoSrc, logoAlt }: ChainCardProps) {
   return (
     <div
       ref={isWinner ? (animRef as React.RefObject<HTMLDivElement>) : undefined}
@@ -43,6 +46,24 @@ function ChainCard({ name, total, color, bgColor, isWinner = false, animRef }: C
         >
           ★ PRECIO IMBATIBLE
         </span>
+      )}
+
+      {/* Logo del supermercado competidor */}
+      {logoSrc && !isWinner && (
+        <div className="w-full flex items-center justify-center mb-1">
+          <div
+            className="rounded-lg px-2 py-1.5 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}
+          >
+            <Image
+              src={logoSrc}
+              alt={logoAlt ?? name}
+              width={72}
+              height={28}
+              className="object-contain"
+            />
+          </div>
+        </div>
       )}
 
       <span
@@ -203,10 +224,28 @@ export function MagicComparisonModal() {
   const waUrl  = `https://wa.me/56929855415?text=${waText}`;
 
   const CHAINS = [
-    { name: 'Lider',   total: totalLider,   color: '#0071CE', bg: '#0071CE14' },
-    { name: 'Jumbo',   total: totalJumbo,   color: '#00A44F', bg: '#00A44F14' },
-    { name: 'Tottus',  total: totalTottus,  color: '#E31837', bg: '#E3183714' },
-  ] as const;
+    {
+      name: 'Lider',
+      total: totalLider,
+      color: '#0071CE',
+      bg: '#0071CE14',
+      logo: '/logos/lider.png',
+    },
+    {
+      name: 'Jumbo',
+      total: totalJumbo,
+      color: '#00A44F',
+      bg: '#00A44F14',
+      logo: '/logos/jumbo.png',
+    },
+    {
+      name: 'Tottus',
+      total: totalTottus,
+      color: '#E31837',
+      bg: '#E3183714',
+      logo: '/logos/tottus.png',
+    },
+  ];
 
   return (
     <>
@@ -260,7 +299,7 @@ export function MagicComparisonModal() {
             {/* Title */}
             <div className="text-center pr-8">
               <p className="text-xs font-bold tracking-[0.2em] uppercase text-accent-primary mb-2">
-                La tabla de la verdad 📊
+                La tabla de la verdad
               </p>
               <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-text leading-tight">
                 ¿Cuánto pagarías{' '}
@@ -285,6 +324,8 @@ export function MagicComparisonModal() {
                       total={chain.total}
                       color={chain.color}
                       bgColor={chain.bg}
+                      logoSrc={chain.logo}
+                      logoAlt={`Logo ${chain.name}`}
                     />
                   </div>
                 ))}
